@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureBank - Transfer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>Money Transfer</h2>
+        
+        <!-- Vulnerabilidad CSRF: sin token de protección -->
+        <form action="/transfer" method="POST" id="transferForm">
+            <div class="form-group">
+                <label for="from_account">From Account:</label>
+                <input type="text" id="from_account" name="from_account" 
+                       value="{{ session.username }}" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="to_account">To Account:</label>
+                <input type="text" id="to_account" name="to_account" required 
+                       placeholder="Enter recipient username">
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Amount ($):</label>
+                <input type="number" id="amount" name="amount" 
+                       step="0.01" min="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" 
+                          placeholder="Optional description"></textarea>
+            </div>
+            
+            <!-- Campo oculto vulnerable -->
+            <input type="hidden" name="session_id" value="{{ session.get('user_id') }}">
+            
+            <button type="submit">Transfer Funds</button>
+        </form>
+        
+        <div class="security-warning">
+            <h4>⚠️ Security Note:</h4>
+            <p>Always verify recipient details before transferring.</p>
+            <p id="debugInfo"></p>
+            
+            <!-- Vulnerabilidad: Debug info expuesta -->
+            <script>
+                // Exponer información de sesión
+                document.getElementById('debugInfo').innerHTML = 
+                    'Session ID: ' + '{{ session.get("user_id") }}';
+                
+                // Función vulnerable a inyección
+                function validateInput(input) {
+                    return eval('"' + input + '"'); // ¡NUNCA hacer esto!
+                }
+            </script>
+        </div>
+        
+        <!-- Enlace vulnerable a IDOR -->
+        <div class="quick-links">
+            <h4>Quick Actions:</h4>
+            <a href="/user/profile/1">View Admin Profile</a> |
+            <a href="/user/profile/2">View Alice Profile</a> |
+            <a href="/search?q=">Find Users</a>
+        </div>
+    </div>
+</body>
+</html>

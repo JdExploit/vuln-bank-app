@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureBank - Home</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/dashboard">Dashboard</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>Welcome to SecureBank</h2>
+        <p>Your trusted banking partner since 2025</p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Online Banking</h3>
+                <p>Manage your accounts securely</p>
+            </div>
+            <div class="feature">
+                <h3>Money Transfers</h3>
+                <p>Send money instantly</p>
+            </div>
+            <div class="feature">
+                <h3>Investment</h3>
+                <p>Grow your wealth</p>
+            </div>
+        </div>
+
+        
+<div class="recent-comments">
+    <h3>Recent Comments:</h3>
+    <div class="comments-preview">
+        {% if comments %}
+            {% for comment in comments[-5:] %}
+                <div class="comment-preview">
+                    {{ comment|safe }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <p><a href="/view_comments">View all comments</a></p>
+</div>
+        
+        <!-- Vulnerabilidad XSS: formulario sin sanitización -->
+        <div class="comment-section">
+            <h3>Customer Comments</h3>
+            <form action="/post_comment" method="POST">
+                <textarea name="comment" placeholder="Leave a comment..."></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

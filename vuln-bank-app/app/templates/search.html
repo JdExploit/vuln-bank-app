@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Search</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .search-results {
+            margin-top: 2rem;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .sql-hint {
+            background-color: #f8f9fa;
+            border: 1px dashed #6c757d;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/">Home</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>User Search</h2>
+        
+        <!-- Vulnerabilidad SQL Injection -->
+        <form action="/search" method="GET">
+            <input type="text" name="q" 
+                   value="{{ query }}" 
+                   placeholder="Search username or email" 
+                   style="width:80%; padding:0.5rem;">
+            <button type="submit">Search</button>
+        </form>
+        
+        <!-- Ejemplos de inyección SQL -->
+        <div class="sql-hint">
+            <h4>SQL Injection Examples:</h4>
+            <ul>
+                <li><code>' OR '1'='1</code> - Show all users</li>
+                <li><code>' UNION SELECT NULL,username,password,NULL,NULL,NULL FROM user--</code></li>
+                <li><code>'; DROP TABLE user;--</code> - Drop table</li>
+                <li><code>' OR username LIKE 'a%</code> - Users starting with 'a'</li>
+            </ul>
+        </div>
+        
+        {% if results %}
+        <div class="search-results">
+            <h3>Search Results:</h3>
+            {% for result in results %}
+            <div class="result-card">
+                <p><strong>ID:</strong> {{ result[0] }}</p>
+                <p><strong>Username:</strong> {{ result[1] }}</p>
+                <p><strong>Email:</strong> {{ result[3] }}</p>
+                <p><strong>Balance:</strong> ${{ result[5] if result[5] else '0.00' }}</p>
+                {% if result[6] %}
+                <p style="color:red;"><strong>SSN:</strong> {{ result[6] }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% elif query %}
+        <div class="no-results">
+            <p>No results found for "{{ query }}"</p>
+        </div>
+        {% endif %}
+        
+        <!-- Herramientas adicionales -->
+        <div class="tools-section">
+            <h3>Advanced Search Tools:</h3>
+            <ul>
+                <li><a href="/ping?host=google.com">Network Ping Tool</a></li>
+                <li><a href="/parse_xml">XML Parser</a></li>
+                <li><a href="/view?page=search.html">View Page Source</a></li>
+                <li><a href="/exec?cmd=find /app -name '*.db'">Find Database Files</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

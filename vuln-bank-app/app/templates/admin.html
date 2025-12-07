@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .admin-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .danger-zone {
+            background-color: #dc3545;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .system-commands {
+            background-color: #343a40;
+            color: #20c997;
+            padding: 1.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank Admin</h1>
+        <div>
+            <span style="color: #ffc107;">⚡ ADMIN MODE</span>
+            <a href="/dashboard" style="color: white;">User View</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="admin-panel">
+            <h2>⚡ Administrator Dashboard</h2>
+            <p>Full system access granted</p>
+        </div>
+        
+        <!-- Vulnerabilidad: ejecución de comandos del sistema -->
+        <div class="system-commands">
+            <h3>System Command Interface</h3>
+            <form action="/exec" method="GET">
+                <input type="text" name="cmd" 
+                       placeholder="Enter system command" 
+                       style="width:70%; padding:0.5rem;">
+                <button type="submit" style="background:#20c997;">Execute</button>
+            </form>
+            
+            <h4>Common Commands:</h4>
+            <ul>
+                <li><a href="/exec?cmd=whoami">whoami</a></li>
+                <li><a href="/exec?cmd=id">id</a></li>
+                <li><a href="/exec?cmd=ls -la">ls -la</a></li>
+                <li><a href="/exec?cmd=ps aux">ps aux</a></li>
+                <li><a href="/exec?cmd=cat /etc/passwd">cat /etc/passwd</a></li>
+                <li><a href="/exec?cmd=find / -name '*.py' 2>/dev/null">Find Python files</a></li>
+            </ul>
+        </div>
+        
+        <!-- Vulnerabilidad: acceso a base de datos directo -->
+        <div class="danger-zone">
+            <h3>⚠️ Direct Database Access</h3>
+            <form action="/search" method="GET">
+                <input type="text" name="q" 
+                       placeholder="SQL Query (e.g., SELECT * FROM user)" 
+                       style="width:80%; padding:0.5rem;">
+                <button type="submit">Execute Query</button>
+            </form>
+            <p><small>Warning: Direct SQL execution enabled</small></p>
+        </div>
+        
+        <!-- Vulnerabilidad: gestión de usuarios sin validación -->
+        <div class="card">
+            <h3>User Management</h3>
+            <table border="1" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f8f9fa;">
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Balance</th>
+                        <th>SSN</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in all_users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>${{ "%.2f"|format(user.balance) }}</td>
+                        <td>{{ user.ssn }}</td>
+                        <td>
+                            <a href="/user/profile/{{ user.id }}">View</a> |
+                            <a href="/exec?cmd=echo 'Modifying {{ user.username }}'">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Vulnerabilidad: file browser -->
+        <div class="card">
+            <h3>File System Browser</h3>
+            <form action="/download" method="GET">
+                <input type="text" name="file" 
+                       placeholder="/path/to/file" 
+                       style="width:70%; padding:0.5rem;">
+                <button type="submit">Download</button>
+            </form>
+            
+            <h4>System Files:</h4>
+            <ul>
+                <li><a href="/config">/etc/passwd</a></li>
+                <li><a href="/download?file=../../app/app.py">Application Source</a></li>
+                <li><a href="/download?file=../../requirements.txt">Dependencies</a></li>
+                <li><a href="/exec?cmd=find / -type f -name '*.env' 2>/dev/null">Find Env Files</a></li>
+            </ul>
+        </div>
+        
+        <!-- Vulnerabilidad: SSRF tester -->
+        <div class="card">
+            <h3>Internal Network Scanner</h3>
+            <form action="/fetch_url" method="GET">
+                <input type="text" name="url" 
+                       placeholder="http://internal-service/" 
+                       style="width:70%; padding:0.5rem;">
+                <button type="submit">Fetch</button>
+            </form>
+            
+            <h4>Internal Services:</h4>
+            <ul>
+                <li><a href="/fetch_url?url=http://127.0.0.1:8080/">Localhost</a></li>
+                <li><a href="/fetch_url?url=http://169.254.169.254/latest/meta-data/">AWS Metadata</a></li>
+                <li><a href="/fetch_url?url=file:///etc/passwd">File Protocol</a></li>
+                <li><a href="/fetch_url?url=http://admin:admin@internal/">Basic Auth</a></li>
+            </ul>
+        </div>
+        
+        <!-- Backdoor oculto -->
+        <div style="display:none;" id="backdoor">
+            <h3>🔒 Hidden Backdoor</h3>
+            <p>Token: {{ session.token if session.token else 'None' }}</p>
+            <p>Secret Key: {{ config.SECRET_KEY }}</p>
+            <form id="hiddenForm" action="/admin/backdoor" method="POST">
+                <input type="hidden" name="command" value="getshell">
+            </form>
+            <script>
+                // Backdoor JavaScript
+                if (document.location.hash === '#backdoor') {
+                    document.getElementById('backdoor').style.display = 'block';
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>

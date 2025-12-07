@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SecureBank{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .vulnerability-hint {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1><a href="/">🏦 SecureBank</a></h1>
+            <div class="nav-links">
+                {% if session.username %}
+                    <span style="color: #4a5568; font-weight: 500;">Welcome, {{ session.username }}</span>
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/transfer">Transfer</a>
+                    {% if session.is_admin %}
+                        <a href="/admin" style="color: #d69e2e;">Admin Panel</a>
+                    {% endif %}
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/">Home</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        <p>© 2024 SecureBank. Member FDIC. | <a href="/view_comments">Customer Feedback</a> | <a href="/search">User Directory</a></p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">For security testing: Try our network tools at <a href="/ping">/ping</a></p>
+    </footer>
+</body>
+</html>

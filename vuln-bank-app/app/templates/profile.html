@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .profile-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .sensitive-data {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .vulnerable-form {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+        <div>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/">Home</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>User Profile</h2>
+        
+        <div class="profile-card">
+            <h3>{{ user.username }}</h3>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Balance:</strong> ${{ "%.2f"|format(user.balance) }}</p>
+            
+            <!-- Vulnerabilidad IDOR: Mostrar SSN sin verificación -->
+            <div class="sensitive-data">
+                <h4>⚠️ Sensitive Information:</h4>
+                <p><strong>SSN:</strong> {{ user.ssn }}</p>
+                <p><strong>Account ID:</strong> {{ user.id }}</p>
+                <p><strong>Admin:</strong> {{ user.is_admin }}</p>
+            </div>
+            
+            <!-- Formulario para SSTI -->
+            <div class="vulnerable-form">
+                <h4>Profile Template Editor (Admin Only)</h4>
+                <form action="/render_template" method="POST">
+                    <textarea name="template" rows="5" style="width:100%">
+Hello {{ user.username }},
+Your SSN is: {{ user.ssn }}
+Your balance is: {{ user.balance }}
+                    </textarea>
+                    <button type="submit">Render Template</button>
+                </form>
+                <p><small>This feature is for customizing profile views.</small></p>
+            </div>
+            
+            <!-- Vulnerabilidad: carga de perfiles serializados -->
+            <div class="vulnerable-form">
+                <h4>Load Custom Profile</h4>
+                <form action="/profile/load" method="POST">
+                    <input type="text" name="profile" 
+                           placeholder="Enter hex-encoded profile data" 
+                           style="width:100%; padding:0.5rem;">
+                    <button type="submit">Load Profile</button>
+                </form>
+                <p><small>Example: 800495...</small></p>
+            </div>
+        </div>
+        
+        <!-- Enlaces a otras vulnerabilidades -->
+        <div class="profile-actions">
+            <h4>Account Tools:</h4>
+            <ul>
+                <li><a href="/search?q={{ user.username }}">Search similar users</a></li>
+                <li><a href="/view?page=profile.html">View template source</a></li>
+                <li><a href="/exec?cmd=echo {{ user.username }}">Test command</a></li>
+                <li><a href="/fetch_url?url=http://internal.bank.local/users/{{ user.id }}">
+                    Fetch internal data</a></li>
+            </ul>
+        </div>
+        
+        <!-- Información de debug (vulnerable) -->
+        <div style="background:#e9ecef; padding:1rem; margin-top:2rem; border-radius:5px;">
+            <h5>Debug Information:</h5>
+            <p>User ID: {{ user.id }}</p>
+            <p>Session ID: {{ session.get('user_id', 'None') }}</p>
+            <p>Template: profile.html</p>
+        </div>
+    </div>
+</body>
+</html>

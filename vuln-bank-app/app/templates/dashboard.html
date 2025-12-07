@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureBank - Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+        <div>
+            <span>Welcome, {{ user.username }}</span>
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h2>Account Dashboard</h2>
+        
+        <div class="account-info">
+            <h3>Balance: ${{ "%.2f"|format(user.balance) }}</h3>
+            <p>Account: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <!-- Vulnerabilidad IDOR: enlace a perfil sin protección -->
+            <p><a href="/user/profile/{{ user.id }}">View Profile</a></p>
+        </div>
+        
+        <!-- Vulnerabilidad CSRF: transferencia sin token -->
+        <div class="transfer-form">
+            <h3>Transfer Money</h3>
+            <form action="/transfer" method="POST">
+                <input type="text" name="to_user" placeholder="Recipient Username" required>
+                <input type="number" name="amount" placeholder="Amount" step="0.01" required>
+                <textarea name="description" placeholder="Description"></textarea>
+                <button type="submit">Transfer</button>
+            </form>
+        </div>
+        
+        <div class="tools">
+            <h3>Banking Tools:</h3>
+            <ul>
+                <li><a href="/search?q=">Search Users</a></li>
+                <li><a href="/fetch_url?url=http://example.com">Fetch URL</a></li>
+                <li><a href="/parse_xml">XML Parser</a></li>
+                <li><a href="/config">View Configuration</a></li>
+                <!-- Vulnerabilidad RCE -->
+                <li><a href="/exec?cmd=whoami">System Info</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

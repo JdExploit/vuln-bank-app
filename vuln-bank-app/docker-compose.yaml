@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  vuln-bank:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+      - ./data/uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=insecure_secret_key_12345
+      - DATABASE_URL=sqlite:///app.db
+    privileged: true
+    restart: unless-stopped
+    command: python app.py

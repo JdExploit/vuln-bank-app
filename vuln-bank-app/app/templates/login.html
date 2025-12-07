@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecureBank - Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <h1>🏦 SecureBank</h1>
+    </nav>
+    
+    <div class="container">
+        <h2>Login to Your Account</h2>
+        
+        <!-- Vulnerabilidad: formulario sin protección CSRF -->
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        
+        <p>Default credentials:</p>
+        <ul>
+            <li>admin / admin123</li>
+            <li>alice / password123</li>
+            <li>bob / qwerty</li>
+        </ul>
+        
+        <div class="hint">
+            <h4>Security Tools:</h4>
+            <p>Network Ping: <a href="/ping?host=127.0.0.1">Try ping</a></p>
+            <p>File Download: <a href="/download?file=test.txt">Download test file</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Comments - SecureBank{% endblock %}
+
+{% block content %}
+<h2>Customer Comments</h2>
+
+<div class="comments-section">
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="comment">
+                <!-- VULNERABILIDAD XSS: no sanitizar -->
+                {{ comment|safe }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
+</div>
+
+<div class="add-comment">
+    <h3>Add Comment</h3>
+    <form action="/post_comment" method="POST">
+        <textarea name="comment" rows="4" placeholder="Your comment..." required></textarea>
+        <button type="submit">Submit Comment</button>
+    </form>
+</div>
+{% endblock %}
