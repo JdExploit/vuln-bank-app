@@ -5,141 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SecureBank{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-/*
- * Estilo UX Designer Expert (Base de la Aplicación)
- * Paleta: Azul (#007AFF - Azul Primario) y Blanco/Grises.
- */
-
-/* --- Estilo Base y Tipografía --- */
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6; /* Fondo muy claro y suave */
-    color: #333333; /* Texto principal oscuro */
-    margin: 0;
-    padding: 0;
-    min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura */
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px; /* Padding horizontal */
-    flex: 1; /* Permite que el contenido se estire */
-}
-
-/* --- Barra de Navegación (NAV) --- */
-
-nav {
-    background-color: #ffffff; /* Fondo blanco para la barra superior */
-    padding: 15px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra sutil */
-    border-bottom: 3px solid #007AFF; /* Línea de color primario */
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav h1 a {
-    margin: 0;
-    font-weight: 700;
-    color: #007AFF; /* Azul primario para el logo */
-    font-size: 1.5rem;
-    text-decoration: none;
-}
-
-.nav-links a, .nav-links span {
-    color: #333333; /* Texto oscuro para los enlaces */
-    text-decoration: none;
-    padding: 8px 12px;
-    margin-left: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-weight: 500;
-}
-
-.nav-links a:hover {
-    background-color: #e9ecef; /* Resaltado suave al pasar el ratón */
-}
-
-/* Enlace especial para el Admin Panel */
-.nav-links a[style*="d69e2e"] { /* Apunta al color inline #d69e2e (amarillo) */
-    color: #dc3545 !important; /* Usar rojo para el admin panel para destacar peligro/acceso */
-    font-weight: 600;
-    border: 1px solid #dc3545;
-}
-
-.nav-links a[style*="d69e2e"]:hover {
-    background-color: #dc3545;
-    color: white !important;
-}
-
-/* --- Hint de Vulnerabilidad (Diseño de Alerta) --- */
-
-.vulnerability-hint {
-    background: #fff3cd; /* Amarillo claro */
-    border: 1px solid #ffeeba;
-    border-left: 5px solid #ffc107; /* Borde izquierdo naranja/amarillo fuerte */
-    color: #856404; /* Texto marrón oscuro */
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 1.5rem 0;
-    font-family: 'Consolas', monospace;
-    font-size: 0.95rem;
-}
-
-/* --- Pie de Página (FOOTER) --- */
-
-footer {
-    margin-top: auto; /* Empuja el footer hacia abajo */
-    background-color: #343a40; /* Gris oscuro, clásico para footers */
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
-    border-top: 1px solid #212529;
-}
-
-footer p {
-    margin: 5px 0;
-}
-
-footer a {
-    color: #007AFF; /* Enlaces azules en el footer */
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-footer a:hover {
-    color: #4da6ff;
-    text-decoration: underline;
-}
-
-/* Estilo para el hint de seguridad */
-footer p[style*="opacity"] {
-    color: #ced4da; /* Texto más claro para la nota pequeña */
-}
-    </style>
 </head>
 <body>
     <nav>
         <div class="nav-container">
             <h1><a href="/">🏦 SecureBank</a></h1>
             <div class="nav-links">
-                {% if session.username %}
+                {% if session.get('username') %}
                     <span style="color: #4a5568; font-weight: 500;">Welcome, {{ session.username }}</span>
                     <a href="/dashboard">Dashboard</a>
                     <a href="/transfer">Transfer</a>
-                    {% if session.is_admin %}
-                        <a href="/admin" style="color: #d69e2e;">Admin Panel</a>
+                    
+                    {# Muestra el panel de Admin si is_admin es True #}
+                    {% if session.get('is_admin') %}
+                        <a href="/admin" style="color: #d69e2e;">Admin Panel</a> 
                     {% endif %}
+                    
                     <a href="/logout">Logout</a>
                 {% else %}
                     <a href="/login">Login</a>
@@ -154,10 +35,10 @@ footer p[style*="opacity"] {
     </div>
     
     <footer>
-        <p>© 2024 SecureBank. Member FDIC. | <a href="/view_comments">Customer Feedback</a> | <a href="/search">User Directory</a></p>
-        <p style="font-size: 0.8rem; opacity: 0.7;">For security testing: Try our network tools at <a href="/ping">/ping</a></p>
+        <div class="nav-container">
+            <p>© 2024 SecureBank. Member FDIC. | <a href="/comments">Customer Feedback (XSS)</a> | <a href="/search">User Directory (SQLi)</a></p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">For security testing: Try our network tools at <a href="/ping">/ping (CMDi)</a></p>
+        </div>
     </footer>
 </body>
-
 </html>
-
