@@ -4,29 +4,276 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
     <style>
-        .admin-panel {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 2rem 0;
-        }
-        
-        .danger-zone {
-            background-color: #dc3545;
-            color: white;
-            padding: 1.5rem;
-            border-radius: 5px;
-            margin: 1rem 0;
-        }
-        
-        .system-commands {
-            background-color: #343a40;
-            color: #20c997;
-            padding: 1.5rem;
-            border-radius: 5px;
-            font-family: monospace;
-        }
+/*
+ * Estilo Moderno para el Panel de Administrador de SecureBank
+ * Paleta de colores: Oscura, morados, cian, y rojos de advertencia.
+ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212; /* Fondo muy oscuro */
+    color: #f0f0f0; /* Texto claro */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+nav {
+    background-color: #1f1f1f; /* Cabecera oscura */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+nav h1 {
+    margin: 0;
+    font-weight: 700;
+    color: #20c997; /* Verde cian para el logo */
+}
+
+nav div a {
+    text-decoration: none;
+    padding: 8px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav div a:hover {
+    background-color: #333333;
+}
+
+/* Títulos y secciones */
+
+.admin-panel {
+    /* El gradiente original se mantiene, solo se mejora el aspecto */
+    padding: 3rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid #764ba2;
+}
+
+.admin-panel h2 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.card {
+    background-color: #1f1f1f; /* Fondo de las tarjetas */
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #667eea;
+}
+
+.card h3 {
+    color: #20c997;
+    margin-top: 0;
+    border-bottom: 2px solid #333333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* Zona de Peligro y Comandos */
+
+.danger-zone {
+    /* Mantenemos el fondo rojo para la advertencia, pero con un estilo más moderno */
+    background-color: #9c27b0; /* Púrpura oscuro para un mejor contraste */
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #dc3545; /* Borde rojo para destacar la 'zona de peligro' */
+}
+
+.danger-zone h3 {
+    color: #ffeb3b; /* Amarillo vibrante para la advertencia */
+}
+
+.system-commands {
+    /* El estilo original de la terminal se mantiene, mejorando el contraste */
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #20c997;
+}
+
+.system-commands h3 {
+    color: #ffc107; /* Amarillo para el título de la terminal */
+}
+
+/* Formularios e Inputs */
+
+input[type="text"] {
+    background-color: #333333;
+    border: 1px solid #555555;
+    color: #f0f0f0;
+    padding: 0.75rem;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #20c997;
+    outline: none;
+    box-shadow: 0 0 5px rgba(32, 201, 151, 0.5);
+}
+
+button[type="submit"] {
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+/* Botón de Ejecutar (Comandos del Sistema) */
+.system-commands button[type="submit"] {
+    background-color: #20c997 !important;
+}
+
+.system-commands button[type="submit"]:hover {
+    background-color: #17a27b !important;
+}
+
+/* Botón de Ejecutar Query (Base de Datos) */
+.danger-zone button[type="submit"] {
+    background-color: #dc3545;
+}
+
+.danger-zone button[type="submit"]:hover {
+    background-color: #c82333;
+}
+
+/* Botón de Descargar (File System) */
+.card button[type="submit"] {
+    background-color: #667eea;
+}
+
+.card button[type="submit"]:hover {
+    background-color: #5a6fe0;
+}
+
+
+button[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+/* Listas de Comandos y Servicios */
+.system-commands ul, .card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.system-commands ul li, .card ul li {
+    margin-bottom: 8px;
+}
+
+.system-commands ul li a {
+    color: #20c997;
+    text-decoration: none;
+    background-color: #333333;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.system-commands ul li a:hover {
+    background-color: #444444;
+}
+
+.card ul li a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.card ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Tabla de Gestión de Usuarios */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+thead tr {
+    background-color: #333333 !important;
+    color: white;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #444444;
+}
+
+tbody tr {
+    border-bottom: 1px solid #444444;
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #222222; /* Filas pares con color ligeramente diferente */
+}
+
+tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+tbody td:last-child a {
+    color: #ffc107;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+tbody td:last-child a:hover {
+    text-decoration: underline;
+}
+
+/* Elementos pequeños/notas */
+
+small {
+    color: #aaaaaa;
+    display: block;
+    margin-top: 10px;
+}
+
+/* Backdoor (oculto) */
+#backdoor {
+    background-color: #000000;
+    border: 2px dashed #ffc107;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+}
+
+#backdoor h3 {
+    color: #ffc107;
+}
+
+#backdoor p {
+    color: #20c997;
+    font-family: monospace;
+}
     </style>
 </head>
 <body>
@@ -165,4 +412,5 @@
         </div>
     </div>
 </body>
+
 </html>
