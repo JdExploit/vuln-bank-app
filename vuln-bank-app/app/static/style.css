@@ -1397,3 +1397,105 @@ nav div a:hover {
     color: white;
     border-color: #007AFF;
 }
+
+    /*
+ * Estilo UX Designer Expert (Página de Comentarios)
+ * Paleta: Azul (#007AFF), Blanco y Gris. Énfasis en la limpieza.
+ */
+
+/* Estilos de bloque (asumiendo que los estilos de h2 y container ya están en la base) */
+
+/* --- 1. Sección de Comentarios (Visualización) --- */
+
+.comments-section {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.comment {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f8f9fa; /* Fondo gris claro para cada comentario */
+    border-radius: 8px;
+    border-left: 4px solid #007AFF; /* Línea de color para destacar la entrada */
+    line-height: 1.6;
+    word-wrap: break-word; /* Asegura que el contenido largo no desborde */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.comment:last-child {
+    margin-bottom: 0;
+}
+
+/* Nota: Dado que el contenido es vulnerable ({{ comment|safe }}),
+   el estilo solo afecta al contenedor, no al contenido potencialmente inyectado. */
+
+.no-comments {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+}
+
+/* --- 2. Sección para Añadir Comentario (Formulario) --- */
+
+.add-comment {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.add-comment h3 {
+    color: #333333;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.add-comment form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.add-comment textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.add-comment textarea:focus {
+    border-color: #007AFF;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.add-comment button[type="submit"] {
+    background-color: #007AFF;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: background-color 0.2s;
+}
+
+.add-comment button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
