@@ -1,266 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Profile</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-/*
- * Estilo UX Designer Expert (Página de Perfil)
- * Paleta: Azul (#007AFF), Blanco y Gris. Rojo/Naranja para advertencias.
- */
+{% extends "base.html" %}
 
-/* 1. Estilos Globales y de Contenedor */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
-    color: #333333;
-    margin: 0;
-    padding: 0;
-}
+{% block title %}User Profile - {{ user.username }}{% endblock %}
 
-.container {
-    max-width: 900px; /* Ancho optimizado para vistas de perfil */
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-h2 {
-    color: #333333;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
-}
-
-/* --- 2. Barra de Navegación (NAV) --- */
-
-nav {
-    background-color: #ffffff;
-    padding: 15px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    border-bottom: 3px solid #007AFF;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav h1 {
-    margin: 0;
-    color: #007AFF;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-nav div a {
-    color: #333333;
-    text-decoration: none;
-    padding: 8px 12px;
-    margin-left: 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-nav div a:hover {
-    background-color: #e9ecef;
-}
-
-/* --- 3. Tarjeta de Perfil (Profile Card) --- */
-
-.profile-card {
-    background: #ffffff;
-    padding: 3rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
-    margin: 2rem 0;
-}
-
-.profile-card h3 {
-    color: #007AFF;
-    font-size: 2.5rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.profile-card p {
-    margin: 10px 0;
-    font-size: 1.1rem;
-    color: #555555;
-}
-
-.profile-card strong {
-    color: #333333;
-    font-weight: 600;
-}
-
-/* --- 4. Datos Sensibles (Sensitive Data - IDOR) --- */
-
-.sensitive-data {
-    /* Estilo de advertencia fuerte para datos críticos */
-    background-color: #fcf8e3; /* Amarillo muy pálido */
-    border-left: 5px solid #ffc107; /* Naranja/Amarillo fuerte */
-    padding: 1.5rem;
-    margin: 2rem 0;
-    border-radius: 8px;
-    color: #8a6d3b;
-}
-
-.sensitive-data h4 {
-    color: #ffc107;
-    margin-top: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.sensitive-data p {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-/* --- 5. Formularios Vulnerables (SSTI & Deserialización) --- */
-
-.vulnerable-form {
-    /* Estilo para los formularios de prueba de seguridad */
-    background-color: #fef4f4; /* Rojo/Rosa muy pálido */
-    border: 1px solid #f5c6cb;
-    border-left: 5px solid #dc3545; /* Línea de peligro roja */
-    padding: 2rem;
-    margin: 2rem 0;
-    border-radius: 8px;
-}
-
-.vulnerable-form h4 {
-    color: #dc3545;
-    margin-top: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.vulnerable-form form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.vulnerable-form textarea,
-.vulnerable-form input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dc3545; /* Borde rojo para la vulnerabilidad */
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-family: monospace;
-}
-
-.vulnerable-form textarea:focus,
-.vulnerable-form input:focus {
-    border-color: #ff0000;
-    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-    outline: none;
-}
-
-.vulnerable-form button[type="submit"] {
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s;
-}
-
-.vulnerable-form button[type="submit"]:hover {
-    background-color: #c82333;
-}
-
-.vulnerable-form p small {
-    display: block;
-    margin-top: 10px;
-    color: #dc3545;
-}
-
-/* --- 6. Acciones del Perfil (Profile Actions) --- */
-
-.profile-actions {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
-}
-
-.profile-actions h4 {
-    color: #333333;
-    font-size: 1.2rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 10px;
-}
-
-.profile-actions ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.profile-actions ul li a {
-    text-decoration: none;
-    color: #007AFF;
-    background-color: #f0f8ff; /* Fondo azul muy claro */
-    padding: 8px 15px;
-    border-radius: 20px;
-    border: 1px solid #b3d9ff;
-    transition: background-color 0.2s;
-    font-weight: 500;
-}
-
-.profile-actions ul li a:hover {
-    background-color: #007AFF;
-    color: white;
-    border-color: #007AFF;
-}
-
-/* --- 7. Debug/Información Extra --- */
-div[style*="e9ecef"] { /* Apunta al div de debug */
-    background: #e9ecef !important;
-    padding: 1.5rem !important;
-    margin-top: 3rem !important;
-    border-radius: 8px !important;
-    border: 1px solid #ced4da;
-}
-
-div[style*="e9ecef"] h5 {
-    color: #495057;
-    margin-top: 0;
-    border-bottom: 1px solid #ced4da;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-div[style*="e9ecef"] p {
-    font-size: 0.9rem;
-    color: #555555;
-    font-family: monospace;
-}
-    </style>
-</head>
-<body>
-    <nav>
-        <h1>🏦 SecureBank</h1>
-        <div>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/">Home</a>
-        </div>
-    </nav>
+{% block content %}
     
     <div class="container">
         <h2>User Profile</h2>
@@ -268,19 +10,20 @@ div[style*="e9ecef"] p {
         <div class="profile-card">
             <h3>{{ user.username }}</h3>
             <p><strong>Email:</strong> {{ user.email }}</p>
+            {# Asumiendo que pasaste un objeto 'user' completo (que contiene 'balance') #}
             <p><strong>Balance:</strong> ${{ "%.2f"|format(user.balance) }}</p>
             
-            <!-- Vulnerabilidad IDOR: Mostrar SSN sin verificación -->
             <div class="sensitive-data">
-                <h4>⚠️ Sensitive Information:</h4>
+                <h4>⚠️ Sensitive Information (IDOR Test):</h4>
+                {# La exposición de datos sensibles está intencionalmente aquí para la prueba #}
                 <p><strong>SSN:</strong> {{ user.ssn }}</p>
                 <p><strong>Account ID:</strong> {{ user.id }}</p>
                 <p><strong>Admin:</strong> {{ user.is_admin }}</p>
             </div>
             
-            <!-- Formulario para SSTI -->
             <div class="vulnerable-form">
-                <h4>Profile Template Editor (Admin Only)</h4>
+                <h4>Profile Template Editor (SSTI Test)</h4>
+                {# Nota: Este formulario requerirá una ruta en app.py: /render_template #}
                 <form action="/render_template" method="POST">
                     <textarea name="template" rows="5" style="width:100%">
 Hello {{ user.username }},
@@ -289,42 +32,38 @@ Your balance is: {{ user.balance }}
                     </textarea>
                     <button type="submit">Render Template</button>
                 </form>
-                <p><small>This feature is for customizing profile views.</small></p>
+                <p><small>This feature is for customizing profile views. Try {{ 7*7 }}</small></p>
             </div>
             
-            <!-- Vulnerabilidad: carga de perfiles serializados -->
             <div class="vulnerable-form">
-                <h4>Load Custom Profile</h4>
-                <form action="/profile/load" method="POST">
-                    <input type="text" name="profile" 
-                           placeholder="Enter hex-encoded profile data" 
+                <h4>Load Custom Profile (Insecure Deserialization Test)</h4>
+                {# Nota: Este formulario requerirá una ruta en app.py: /profile/load #}
+                <form action="/import_profile" method="POST">
+                    <input type="text" name="data" 
+                           placeholder="Enter Base64-encoded pickle data" 
                            style="width:100%; padding:0.5rem;">
                     <button type="submit">Load Profile</button>
                 </form>
-                <p><small>Example: 800495...</small></p>
+                <p><small>Example: Import Profile using base64-encoded pickle payload.</small></p>
             </div>
         </div>
         
-        <!-- Enlaces a otras vulnerabilidades -->
         <div class="profile-actions">
             <h4>Account Tools:</h4>
             <ul>
-                <li><a href="/search?q={{ user.username }}">Search similar users</a></li>
-                <li><a href="/view?page=profile.html">View template source</a></li>
-                <li><a href="/exec?cmd=echo {{ user.username }}">Test command</a></li>
-                <li><a href="/fetch_url?url=http://internal.bank.local/users/{{ user.id }}">
-                    Fetch internal data</a></li>
+                <li><a href="/search?q={{ user.username }}">Search similar users (SQLi)</a></li>
+                <li><a href="/download?file=profile.html">View template source (LFI)</a></li>
+                <li><a href="/ping?host=echo {{ user.username }}">Test command (CMDi)</a></li>
+                {# SSRF: Asumiendo que 'fetch_url' es la ruta '/fetch' #}
+                <li><a href="/fetch?url=http://internal.bank.local/users/{{ user.id }}">Fetch internal data (SSRF)</a></li>
             </ul>
         </div>
         
-        <!-- Información de debug (vulnerable) -->
-        <div style="background:#e9ecef; padding:1rem; margin-top:2rem; border-radius:5px;">
-            <h5>Debug Information:</h5>
+        <div class="debug-info">
+            <h5>Debug Information (For testing purposes):</h5>
             <p>User ID: {{ user.id }}</p>
             <p>Session ID: {{ session.get('user_id', 'None') }}</p>
             <p>Template: profile.html</p>
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}
