@@ -6,31 +6,27 @@ USER root
 
 # Instalación de herramientas de prueba y dependencias de la aplicación
 RUN apt-get update && apt-get install -y \
-    # net-tools para 'ping' y otras utilidades
     net-tools \
-    # curl para probar SSRF
     curl \
-    # sqlite3 para la gestión de la DB
     sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Definimos el directorio de trabajo
+# Definimos el directorio de trabajo (donde se ejecutará la aplicación)
 WORKDIR /app
 
-# Copiamos el archivo de requisitos e instalamos
+# Copiamos el archivo de requisitos (asumiendo que está en la raíz del proyecto)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiamos el código principal de la aplicación
-# Asumimos que app.py está en el root de tu proyecto
-COPY app.py .
+# Copiamos toda la carpeta 'app' (que contiene el código, incluyendo app.py)
+# Esto mapea ./app/ -> /app/ dentro del contenedor.
+COPY app/ .
 
-# Crear el directorio de uploads que se usará para el LFI.
-# Esto es redundante si usas el volumen, pero asegura que el directorio existe.
+# Crear el directorio de uploads que se usará para el LFI/Path Traversal.
 RUN mkdir -p /app/uploads && chmod 777 /app/uploads
 
 # Exponer el puerto de la aplicación
 EXPOSE 8080
 
-# Comando de ejecución
+# Comando de ejecución: Lanza app.py desde el directorio de trabajo /app
 CMD ["python", "app.py"]
