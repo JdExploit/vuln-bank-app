@@ -361,3 +361,198 @@ nav div a:hover {
     color: white;
     border-color: #007AFF;
 }
+
+
+    /*
+ * Estilo UX Designer Expert (Home Page - index.html)
+ * Paleta: Azul (#007AFF), Blanco y Gris claro.
+ */
+
+/* 1. Estilos Globales y de Contenedor */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    color: #333333;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.container > p {
+    color: #555555;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+/* --- 2. Barra de Navegación (NAV) --- */
+
+nav {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-bottom: 3px solid #007AFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 {
+    margin: 0;
+}
+
+nav h1 a {
+    color: #007AFF;
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+nav div a {
+    color: #333333;
+    text-decoration: none;
+    padding: 8px 12px;
+    margin-left: 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+nav div a:hover {
+    background-color: #e9ecef;
+}
+
+/* --- 3. Sección de Características (Features) --- */
+
+.features {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.feature {
+    flex: 1;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-top: 5px solid #007AFF;
+    transition: transform 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px); /* Pequeño efecto de levantamiento */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature h3 {
+    color: #007AFF;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    color: #555555;
+    font-size: 1rem;
+}
+
+/* --- 4. Sección de Comentarios (Comments Preview & Form) --- */
+
+h3 {
+    color: #333333;
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.recent-comments {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.comments-preview {
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    margin-bottom: 15px;
+}
+
+.comment-preview {
+    padding: 10px 0;
+    border-bottom: 1px dashed #ced4da;
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+.comment-preview:last-child {
+    border-bottom: none;
+}
+
+.recent-comments p a {
+    color: #007AFF;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.recent-comments p a:hover {
+    text-decoration: underline;
+}
+
+/* Formulario de Comentarios (Vulnerabilidad XSS) */
+.comment-section {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.comment-section textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.comment-section textarea:focus {
+    border-color: #007AFF;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.comment-section button[type="submit"] {
+    background-color: #007AFF;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.comment-section button[type="submit"]:hover {
+    background-color: #0056b3;
+}
