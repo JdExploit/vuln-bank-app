@@ -1,423 +1,128 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <style>
-/*
- * Estilo UX Designer Expert (Inspirado en BBVA/Banca Moderna)
- * Paleta: Azul (#007AFF - Azul Primario) y Blanco/Grises.
- */
+{% extends "base.html" %}
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6; /* Fondo muy claro y suave */
-    color: #333333; /* Texto principal oscuro */
-    margin: 0;
-    padding: 0;
-}
+{% block title %}Admin Dashboard - Full Access{% endblock %}
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-/* --- Barra de Navegación (NAV) --- */
-
-nav {
-    background-color: #ffffff; /* Fondo blanco para la barra superior */
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra muy sutil */
-    border-bottom: 3px solid #007AFF; /* Línea de color primario para destacar */
-}
-
-nav h1 {
-    margin: 0;
-    font-weight: 700;
-    color: #007AFF; /* Azul primario para el logo */
-    font-size: 1.5rem;
-}
-
-nav div span, nav div a {
-    color: #333333 !important; /* Texto oscuro para los enlaces */
-    text-decoration: none;
-    padding: 8px 12px;
-    margin-left: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-nav div a:hover {
-    background-color: #e9ecef; /* Resaltado suave al pasar el ratón */
-}
-
-/* Estilo para el modo ADMIN */
-nav div span {
-    color: #dc3545 !important; /* Rojo/Naranja de advertencia o estado activo */
-    font-weight: bold;
-}
-
-/* --- Panel Principal (ADMIN-PANEL) --- */
-
-.admin-panel {
-    /* Mantenemos el nombre de la clase pero cambiamos radicalmente el estilo */
-    background: #007AFF; /* Azul corporativo sólido como fondo del encabezado */
-    color: white;
-    padding: 2.5rem;
-    border-radius: 12px;
-    margin: 2rem 0;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
-
-.admin-panel h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-top: 0;
-}
-
-/* --- Contenedores de Funcionalidad (CARD) --- */
-
-.card, .system-commands, .danger-zone {
-    background-color: #ffffff; /* Fondo blanco */
-    padding: 2rem;
-    border-radius: 8px;
-    margin: 1.5rem 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra muy ligera */
-    border: 1px solid #e0e0e0; /* Borde suave */
-}
-
-.card h3, .system-commands h3, .danger-zone h3 {
-    color: #333333; /* Título oscuro */
-    margin-top: 0;
-    border-bottom: 1px solid #eeeeee;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-
-/* --- Estilo Específico: System Commands (La Terminal) --- */
-
-.system-commands {
-    /* Mantener un aspecto de terminal para esta sección, pero limpio */
-    background-color: #212529; /* Fondo negro de consola */
-    color: #20c997; /* Verde cian para el texto de la consola */
-    font-family: 'Consolas', 'Courier New', monospace;
-    border: 1px solid #007AFF; /* Borde que marca la sección como importante/técnica */
-}
-
-.system-commands h3 {
-    color: #f0f0f0; /* Título blanco para la terminal */
-    border-bottom-color: #444444;
-}
-
-/* --- Estilo Específico: Danger Zone (Base de Datos) --- */
-
-.danger-zone {
-    /* Estilo de advertencia muy claro, no solo rojo sólido */
-    background-color: #fff3cd; /* Fondo amarillo muy claro */
-    color: #856404; /* Texto marrón oscuro */
-    border: 1px solid #ffeeba;
-    border-left: 5px solid #dc3545; /* Línea de peligro roja */
-}
-
-.danger-zone h3 {
-    color: #dc3545; /* Título rojo */
-}
-
-.danger-zone p small {
-    color: #856404;
-}
-
-/* --- Inputs y Botones (Uniformidad) --- */
-
-input[type="text"] {
-    background-color: #ffffff;
-    border: 1px solid #ced4da;
-    color: #495057;
-    padding: 0.75rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-input[type="text"]:focus {
-    border-color: #007AFF;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra de foco azul suave */
-}
-
-button[type="submit"] {
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-}
-
-/* Botón principal azul (default para File Browser / SSRF) */
-.card button[type="submit"] {
-    background-color: #007AFF;
-}
-
-.card button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Botón de Comandos del Sistema (terminal verde) */
-.system-commands button[type="submit"] {
-    background-color: #20c997 !important;
-}
-
-.system-commands button[type="submit"]:hover {
-    background-color: #17a27b !important;
-}
-
-/* Botón de Danger Zone (rojo) */
-.danger-zone button[type="submit"] {
-    background-color: #dc3545;
-}
-
-.danger-zone button[type="submit"]:hover {
-    background-color: #c82333;
-}
-
-
-/* --- Listas de Comandos/Enlaces --- */
-.system-commands ul, .card ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.system-commands ul li a {
-    color: #20c997; /* El texto de la terminal sigue siendo verde */
-    text-decoration: none;
-    background-color: #333333;
-    padding: 5px 10px;
-    border-radius: 4px;
-    display: inline-block;
-}
-
-.card ul li a {
-    color: #007AFF; /* Enlaces azules */
-    text-decoration: none;
-}
-
-.card ul li a:hover {
-    text-decoration: underline;
-}
-
-/* --- Tabla de Usuarios (Limpieza y Espaciado) --- */
-
-table {
-    width: 100%;
-    border-collapse: separate; /* Usar 'separate' y 'border-spacing' para mejorar la estética */
-    border-spacing: 0 5px; /* Espacio entre filas */
-    margin-top: 15px;
-    font-size: 0.9em;
-}
-
-thead tr {
-    background-color: #f8f9fa;
-    color: #495057;
-    text-align: left;
-    font-weight: 600;
-}
-
-th {
-    padding: 12px 15px;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-td {
-    padding: 12px 15px;
-    background-color: #ffffff;
-    border: 1px solid #e9ecef;
-    border-top: none;
-    border-bottom: 1px solid #e9ecef;
-}
-
-tbody tr:hover td {
-    background-color: #f8f9fa; /* Resaltar fila al pasar el ratón */
-}
-
-/* Borde redondeado para la primera y última fila/celda */
-tbody tr:first-child td:first-child { border-top-left-radius: 4px; }
-tbody tr:first-child td:last-child { border-top-right-radius: 4px; }
-tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
-tbody tr:last-child td:last-child { border-bottom-right-radius: 4px; }
-
-tbody td:last-child a {
-    color: #007AFF;
-    text-decoration: none;
-    margin: 0 5px;
-    font-weight: 500;
-}
-
-tbody td:last-child a:hover {
-    text-decoration: underline;
-}
-
-/* --- Backdoor (Oculto) --- */
-#backdoor {
-    background-color: #212529; /* Sigue siendo oscuro */
-    border: 2px dashed #007AFF;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    border-radius: 8px;
-}
-
-#backdoor h3 {
-    color: #ffffff;
-}
-
-#backdoor p {
-    color: #20c997;
-    font-family: monospace;
-}
-    </style>
-</head>
-<body>
-    <nav>
-        <h1>🏦 SecureBank Admin</h1>
-        <div>
-            <span style="color: #ffc107;">⚡ ADMIN MODE</span>
-            <a href="/dashboard" style="color: white;">User View</a>
-            <a href="/logout">Logout</a>
-        </div>
-    </nav>
+{% block content %}
     
-    <div class="container">
-        <div class="admin-panel">
-            <h2>⚡ Administrator Dashboard</h2>
-            <p>Full system access granted</p>
-        </div>
-        
-        <!-- Vulnerabilidad: ejecución de comandos del sistema -->
-        <div class="system-commands">
-            <h3>System Command Interface</h3>
-            <form action="/exec" method="GET">
-                <input type="text" name="cmd" 
-                       placeholder="Enter system command" 
-                       style="width:70%; padding:0.5rem;">
-                <button type="submit" style="background:#20c997;">Execute</button>
-            </form>
-            
-            <h4>Common Commands:</h4>
-            <ul>
-                <li><a href="/exec?cmd=whoami">whoami</a></li>
-                <li><a href="/exec?cmd=id">id</a></li>
-                <li><a href="/exec?cmd=ls -la">ls -la</a></li>
-                <li><a href="/exec?cmd=ps aux">ps aux</a></li>
-                <li><a href="/exec?cmd=cat /etc/passwd">cat /etc/passwd</a></li>
-                <li><a href="/exec?cmd=find / -name '*.py' 2>/dev/null">Find Python files</a></li>
-            </ul>
-        </div>
-        
-        <!-- Vulnerabilidad: acceso a base de datos directo -->
-        <div class="danger-zone">
-            <h3>⚠️ Direct Database Access</h3>
-            <form action="/search" method="GET">
-                <input type="text" name="q" 
-                       placeholder="SQL Query (e.g., SELECT * FROM user)" 
-                       style="width:80%; padding:0.5rem;">
-                <button type="submit">Execute Query</button>
-            </form>
-            <p><small>Warning: Direct SQL execution enabled</small></p>
-        </div>
-        
-        <!-- Vulnerabilidad: gestión de usuarios sin validación -->
-        <div class="card">
-            <h3>User Management</h3>
-            <table border="1" style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="background:#f8f9fa;">
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Balance</th>
-                        <th>SSN</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in all_users %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>${{ "%.2f"|format(user.balance) }}</td>
-                        <td>{{ user.ssn }}</td>
-                        <td>
-                            <a href="/user/profile/{{ user.id }}">View</a> |
-                            <a href="/exec?cmd=echo 'Modifying {{ user.username }}'">Edit</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Vulnerabilidad: file browser -->
-        <div class="card">
-            <h3>File System Browser</h3>
-            <form action="/download" method="GET">
-                <input type="text" name="file" 
-                       placeholder="/path/to/file" 
-                       style="width:70%; padding:0.5rem;">
-                <button type="submit">Download</button>
-            </form>
-            
-            <h4>System Files:</h4>
-            <ul>
-                <li><a href="/config">/etc/passwd</a></li>
-                <li><a href="/download?file=../../app/app.py">Application Source</a></li>
-                <li><a href="/download?file=../../requirements.txt">Dependencies</a></li>
-                <li><a href="/exec?cmd=find / -type f -name '*.env' 2>/dev/null">Find Env Files</a></li>
-            </ul>
-        </div>
-        
-        <!-- Vulnerabilidad: SSRF tester -->
-        <div class="card">
-            <h3>Internal Network Scanner</h3>
-            <form action="/fetch_url" method="GET">
-                <input type="text" name="url" 
-                       placeholder="http://internal-service/" 
-                       style="width:70%; padding:0.5rem;">
-                <button type="submit">Fetch</button>
-            </form>
-            
-            <h4>Internal Services:</h4>
-            <ul>
-                <li><a href="/fetch_url?url=http://127.0.0.1:8080/">Localhost</a></li>
-                <li><a href="/fetch_url?url=http://169.254.169.254/latest/meta-data/">AWS Metadata</a></li>
-                <li><a href="/fetch_url?url=file:///etc/passwd">File Protocol</a></li>
-                <li><a href="/fetch_url?url=http://admin:admin@internal/">Basic Auth</a></li>
-            </ul>
-        </div>
-        
-        <!-- Backdoor oculto -->
-        <div style="display:none;" id="backdoor">
-            <h3>🔒 Hidden Backdoor</h3>
-            <p>Token: {{ session.token if session.token else 'None' }}</p>
-            <p>Secret Key: {{ config.SECRET_KEY }}</p>
-            <form id="hiddenForm" action="/admin/backdoor" method="POST">
-                <input type="hidden" name="command" value="getshell">
-            </form>
-            <script>
-                // Backdoor JavaScript
-                if (document.location.hash === '#backdoor') {
-                    document.getElementById('backdoor').style.display = 'block';
-                }
-            </script>
-        </div>
+    <div class="admin-panel">
+        <h2>⚡ Administrator Dashboard</h2>
+        <p>Full system access granted. Welcome, {{ session.username }}</p>
     </div>
-</body>
+    
+    {# Muestra el resultado de los comandos si existe #}
+    {% if command_output %}
+        <div class="system-commands" style="padding: 1.5rem;">
+            <h4 style="margin-bottom: 5px;">Output:</h4>
+            <pre style="white-space: pre-wrap; word-wrap: break-word; color: white;">{{ command_output }}</pre>
+        </div>
+    {% endif %}
 
-</html>
-
+    <div class="system-commands">
+        <h3>System Command Interface (CMDi Test)</h3>
+        <form action="/exec" method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="cmd" 
+                   placeholder="Enter system command (e.g., ls -la or whoami)" 
+                   style="flex-grow: 1;">
+            <button type="submit">Execute</button>
+        </form>
+        
+        <h4>Quick Links:</h4>
+        <ul>
+            <li><a href="/exec?cmd=whoami">whoami</a> | </li>
+            <li><a href="/exec?cmd=ls -la">ls -la</a> | </li>
+            <li><a href="/exec?cmd=cat /etc/passwd">cat /etc/passwd</a> | </li>
+            <li><a href="/exec?cmd=find / -name '*.py' 2>/dev/null">Find Python files</a></li>
+        </ul>
+    </div>
+    
+    <div class="danger-zone">
+        <h3>⚠️ Direct Database Access (SQLi Test)</h3>
+        {# Reutilizamos la ruta /search para demostrar la inyección #}
+        <form action="/search" method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="q" 
+                   placeholder="SQL Query (e.g., ' UNION SELECT 1,2,3,4,5,6,7 FROM user-- )" 
+                   style="flex-grow: 1;">
+            <button type="submit">Execute Query</button>
+        </form>
+        <p><small>Warning: Direct SQL execution enabled for admin search functionality.</small></p>
+    </div>
+    
+    <div class="card">
+        <h3>User Management (Data Exposure)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>SSN</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in all_users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>${{ "%.2f"|format(user.balance) }}</td>
+                    <td>{{ user.ssn }}</td>
+                    <td>
+                        <a href="/user/profile/{{ user.id }}">View Profile (IDOR)</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3>File System Browser (LFI Test)</h3>
+        <form action="/download" method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="file" 
+                   placeholder="/path/to/file (e.g., ../../app/app.py)" 
+                   style="flex-grow: 1;">
+            <button type="submit">Download</button>
+        </form>
+        
+        <h4>Quick Links:</h4>
+        <ul>
+            <li><a href="/download?file=/etc/passwd">/etc/passwd</a> | </li>
+            <li><a href="/download?file=../../app/app.py">Application Source</a> | </li>
+            <li><a href="/download?file=../../requirements.txt">Dependencies</a></li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h3>Internal Network Scanner (SSRF Test)</h3>
+        <form action="/fetch" method="GET" style="display: flex; gap: 10px;">
+            <input type="text" name="url" 
+                   placeholder="Internal URL (e.g., http://169.254.169.254/)" 
+                   style="flex-grow: 1;">
+            <button type="submit">Fetch</button>
+        </form>
+        
+        <h4>Quick Links:</h4>
+        <ul>
+            <li><a href="/fetch?url=http://127.0.0.1:8080/">Localhost</a> | </li>
+            <li><a href="/fetch?url=http://169.254.169.254/latest/meta-data/">AWS Metadata</a> | </li>
+            <li><a href="/fetch?url=file:///etc/hosts">File Protocol</a></li>
+        </ul>
+    </div>
+    
+    <div style="display:none;" id="backdoor">
+        <h3>🔒 Hidden Backdoor</h3>
+        <p>Token: {{ session.get('token', 'None') }}</p>
+        <p>Secret Key: {{ config.SECRET_KEY }}</p>
+        <form id="hiddenForm" action="/admin/backdoor" method="POST">
+            <input type="hidden" name="command" value="getshell">
+        </form>
+        <script>
+            // Backdoor JavaScript: Activación vía fragmento de URL
+            if (document.location.hash === '#backdoor') {
+                document.getElementById('backdoor').style.display = 'block';
+            }
+        </script>
+    </div>
+{% endblock %}
